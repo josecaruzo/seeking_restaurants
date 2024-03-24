@@ -16,7 +16,7 @@ public class Calendar {
 	/**
 	 * All days working hours will be defined by String using the format hh:mm-hh:mm
 	 * Considering the first hh:mm as opening hour and the second one as closing hour.
-	 * hh as 24h format
+	 * 24h format
 	 * Closed days should be filled with "Closed" or "Fechado"
 	 * */
 

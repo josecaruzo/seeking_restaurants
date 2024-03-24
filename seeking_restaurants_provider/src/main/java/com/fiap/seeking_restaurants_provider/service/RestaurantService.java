@@ -6,6 +6,8 @@ import com.fiap.seeking_restaurants_provider.dto.Restaurant.RestaurantDTO;
 import com.fiap.seeking_restaurants_provider.entity.Restaurant;
 import com.fiap.seeking_restaurants_provider.repository.CalendarRepository;
 import com.fiap.seeking_restaurants_provider.repository.RestaurantRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -21,15 +23,6 @@ public class RestaurantService {
 	@Autowired
 	public RestaurantService(RestaurantRepository restaurantRepository, CalendarRepository calendarRepository) {
 		this.restaurantRepository = restaurantRepository;
-	}
-
-	public RestaurantCalendarDTO findById(Long id){
-		try {
-			Restaurant restaurant = restaurantRepository.getReferenceById(id);
-			return RestaurantCalendarDTO.fromEntity(restaurant);
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Restaurante não encontrado"); // Restaurant not found
-		}
 	}
 
 	public Collection<RestaurantCalendarDTO> findAll(){
@@ -70,12 +63,16 @@ public class RestaurantService {
 
 			updateRestaurant = restaurantRepository.save(updateRestaurant);
 			return RestaurantDTO.fromEntity(updateRestaurant);
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Restaurante não encontrado"); // Restaurant not found
+		}catch ( DataIntegrityViolationException | LazyInitializationException e ) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
 		}
 	}
 
 	public void delete(Long id){
-		restaurantRepository.deleteById(id);
+		try{
+			restaurantRepository.deleteById(id);
+		}catch ( DataIntegrityViolationException | LazyInitializationException e) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
+		}
 	}
 }

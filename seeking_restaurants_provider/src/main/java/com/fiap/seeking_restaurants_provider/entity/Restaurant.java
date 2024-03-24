@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@jakarta.persistence.Table(name = "restaurants")
+@jakarta.persistence.Table(name = "restaurants", uniqueConstraints = { @UniqueConstraint(columnNames = { "id", "name" }) })
 public class Restaurant {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

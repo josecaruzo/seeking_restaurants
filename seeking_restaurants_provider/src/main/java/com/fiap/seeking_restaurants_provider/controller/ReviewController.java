@@ -1,12 +1,9 @@
 package com.fiap.seeking_restaurants_provider.controller;
 
-import com.fiap.seeking_restaurants_provider.dto.Restaurant.RestaurantCalendarDTO;
 import com.fiap.seeking_restaurants_provider.dto.Review.ReviewDTO;
 import com.fiap.seeking_restaurants_provider.dto.Review.ReviewRestaurantDTO;
-
-import com.fiap.seeking_restaurants_provider.dto.Table.TableDTO;
-import com.fiap.seeking_restaurants_provider.dto.Table.TableRestaurantDTO;
 import com.fiap.seeking_restaurants_provider.service.ReviewService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +27,13 @@ public class ReviewController {
 		return ResponseEntity.ok(reviews);
 	}
 	@PostMapping
-	public ResponseEntity<ReviewRestaurantDTO> add(@RequestBody ReviewRestaurantDTO reviewDTO){
+	public ResponseEntity<ReviewRestaurantDTO> add(@Valid @RequestBody ReviewRestaurantDTO reviewDTO){
 		var newReview = reviewService.add(reviewDTO);
 		return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(newReview);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ReviewDTO> update(@PathVariable Long id, @RequestBody ReviewDTO reviewDTO){
+	public ResponseEntity<ReviewDTO> update(@PathVariable Long id, @Valid @RequestBody ReviewDTO reviewDTO){
 		ReviewDTO updateReview = reviewService.update(id, reviewDTO);
 		return ResponseEntity.ok(updateReview);
 	}

@@ -32,7 +32,7 @@ public class Reservation {
 	@Column(length = 80, nullable = false)
 	private String guestEmail;
 
-	@Column(length = 12, nullable = false)
+	@Column(length = 15, nullable = false) // (99)99999-9999
 	private String guestPhone;
 
 	@Column(nullable = false)

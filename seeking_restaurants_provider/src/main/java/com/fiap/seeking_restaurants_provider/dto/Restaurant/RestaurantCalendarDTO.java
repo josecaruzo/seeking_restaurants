@@ -3,9 +3,13 @@ package com.fiap.seeking_restaurants_provider.dto.Restaurant;
 import com.fiap.seeking_restaurants_provider.dto.Calendar.CalendarDTO;
 import com.fiap.seeking_restaurants_provider.entity.Restaurant;
 import com.fiap.seeking_restaurants_provider.entity.Calendar;
-import jakarta.validation.constraints.Min;
+import com.fiap.seeking_restaurants_provider.service.validation.Restaurant.ValidRestaurantCreation;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
+
+@ValidRestaurantCreation(message = "Já foi cadastrado um restaurante com esse nome")
 public record RestaurantCalendarDTO(
 		Long id,
 		@NotBlank(message = "O nome não pode ser vazio") //The name can't be blank
@@ -19,9 +23,10 @@ public record RestaurantCalendarDTO(
 		@NotBlank(message = "O tipo não pode ser vazio") // The type can't be blank
 		String type,
 
-		@Min(value = 0, message = "A capacidade não pode ser menor ou igual a zero") // The capacity can't be negative or zero
+		@Positive(message = "A capacidade não pode ser menor ou igual a zero") // The capacity can't be negative or zero
 		int capacity,
 
+		@Valid
 		CalendarDTO calendar
 ) {
 	public static Restaurant toEntity(RestaurantCalendarDTO restaurantDTO) {

@@ -1,13 +1,15 @@
 package com.fiap.seeking_restaurants_provider.controller;
 
+import com.fiap.seeking_restaurants_provider.controller.exception.ControllerExceptionHandler;
 import com.fiap.seeking_restaurants_provider.dto.Calendar.CalendarDTO;
 import com.fiap.seeking_restaurants_provider.dto.Calendar.CalendarRestaurantDTO;
 import com.fiap.seeking_restaurants_provider.dto.Restaurant.RestaurantCalendarDTO;
 import com.fiap.seeking_restaurants_provider.dto.Restaurant.RestaurantDTO;
 import com.fiap.seeking_restaurants_provider.entity.Calendar;
-import com.fiap.seeking_restaurants_provider.entity.Restaurant;
 import com.fiap.seeking_restaurants_provider.service.CalendarService;
 import com.fiap.seeking_restaurants_provider.service.RestaurantService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +51,7 @@ public class RestaurantController {
 	}
 
 	@PostMapping
-	public ResponseEntity<RestaurantCalendarDTO> add(@RequestBody RestaurantCalendarDTO restaurantDTO){
+	public ResponseEntity<RestaurantCalendarDTO> add(@Valid @RequestBody RestaurantCalendarDTO restaurantDTO){
 		//Adding new restaurant
 		var restaurant = RestaurantDTO.fromDTO(restaurantDTO);
 		var newRestaurant = RestaurantDTO.toEntity(restaurantService.add(restaurant));
@@ -66,7 +68,7 @@ public class RestaurantController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<RestaurantCalendarDTO> update(@PathVariable Long id, @RequestBody RestaurantCalendarDTO restaurantDTO){
+	public ResponseEntity<RestaurantCalendarDTO> update(@PathVariable Long id, @Valid @RequestBody RestaurantCalendarDTO restaurantDTO){
 		//Updating restaurant
 		var updateRestaurant = RestaurantDTO.fromDTO(restaurantDTO);
 		var restaurant = RestaurantDTO.toEntity(restaurantService.update(id, updateRestaurant));

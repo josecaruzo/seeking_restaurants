@@ -11,6 +11,8 @@ import com.fiap.seeking_restaurants_provider.repository.ReservationRepository;
 import com.fiap.seeking_restaurants_provider.repository.RestaurantRepository;
 import com.fiap.seeking_restaurants_provider.repository.TableRepository;
 import com.sun.source.tree.WhileLoopTree;
+import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -63,8 +65,8 @@ public class ReservationService {
 			Restaurant restaurant = restaurantRepository.getReferenceById(restaurant_id);
 			var reservations = reservationRepository.findByRestaurant(restaurant);
 			return reservations.stream().map(ReservationRestaurantTableDTO::fromEntity).collect(Collectors.toList());
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Restaurante não encontrado"); // Restaurant not found
+		}catch ( DataIntegrityViolationException | LazyInitializationException e ) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
 		}
 	}
 
@@ -73,8 +75,8 @@ public class ReservationService {
 			Restaurant restaurant = restaurantRepository.getReferenceById(restaurant_id);
 			var reservations = reservationRepository.findByRestaurantAndReservationDate(restaurant, reservationDate);
 			return reservations.stream().map(ReservationRestaurantTableDTO::fromEntity).collect(Collectors.toList());
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Restaurante não encontrado"); // Restaurant not found
+		}catch ( DataIntegrityViolationException | LazyInitializationException e ) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
 		}
 	}
 
@@ -84,8 +86,8 @@ public class ReservationService {
 			Restaurant restaurant = restaurantRepository.getReferenceById(restaurant_id);
 			var reservations = reservationRepository.findByRestaurantAndReservationDateAndReservationHour(restaurant, reservationDate, reservationHour);
 			return reservations.stream().map(ReservationRestaurantTableDTO::fromEntity).collect(Collectors.toList());
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Restaurante não encontrado"); // Restaurant not found
+		}catch ( DataIntegrityViolationException | LazyInitializationException e ) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
 		}
 	}
 
@@ -100,7 +102,7 @@ public class ReservationService {
 
 			//If total capacity - available tables + all tables that we need to schedule > restaurant total capacity = returns error
 			if((restaurant.getCapacity() - availableTables.size()) + reservation.getTotalTables() > restaurant.getCapacity()){
-				throw new DatabaseException("Restaurante não tem mesas disponíveis para a reserva");
+				throw new DatabaseException("Restaurante não tem essa quantidade de mesas disponíveis para a reserva neste dia e hora");
 			}
 			else{
 				//Adding available tables to the list
@@ -114,8 +116,8 @@ public class ReservationService {
 			var newReservation = reservationRepository.save(reservation);
 
 			return ReservationRestaurantTableDTO.fromEntity(newReservation);
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Restaurante não encontrado"); // Restaurant not found
+		}catch ( DataIntegrityViolationException | LazyInitializationException e ) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
 		}
 	}
 
@@ -133,7 +135,7 @@ public class ReservationService {
 
 				//If total capacity - available tables + all tables that we need to schedule > restaurant total capacity = returns error
 				if((restaurant.getCapacity() - availableTables.size()) + reservation.getTotalTables() > restaurant.getCapacity()){
-					throw new DatabaseException("Restaurante não tem mesas disponíveis para a reserva");
+					throw new DatabaseException("Restaurante não tem essa quantidade de mesas disponíveis para a reserva neste dia e hora");
 				}
 				else{
 					//Adding available tables to the list
@@ -154,7 +156,7 @@ public class ReservationService {
 					if(reservation.getTotalTables() > oldReservation.getTotalTables()){
 						//If total capacity - available tables + all tables that we need to schedule > restaurant total capacity = returns error
 						if((restaurant.getCapacity() - availableTables.size()) + (reservation.getTotalTables() - oldReservation.getTotalTables()) > restaurant.getCapacity()){
-							throw new DatabaseException("Restaurante não tem mesas disponíveis para a reserva");
+							throw new DatabaseException("Restaurante não tem essa quantidade de mesas disponíveis para a reserva neste dia e hora");
 						}
 						else{
 							List<Table> tempTables = new LinkedList<Table>(oldReservation.getTables().stream().toList());
@@ -182,13 +184,17 @@ public class ReservationService {
 			var updatedReservation = reservationRepository.save(oldReservation);
 
 			return ReservationRestaurantTableDTO.fromEntity(updatedReservation);
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Restaurante não encontrado"); // Restaurant not found
+		}catch ( DataIntegrityViolationException | LazyInitializationException e ) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
 		}
 	}
 
 	public void delete(Long id){
-		reservationRepository.deleteById(id);
+		try{
+			reservationRepository.deleteById(id);
+		}catch (DataIntegrityViolationException | LazyInitializationException e ) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
+		}
 	}
 
 }

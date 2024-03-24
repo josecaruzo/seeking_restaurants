@@ -2,23 +2,27 @@ package com.fiap.seeking_restaurants_provider.dto.Calendar;
 
 import com.fiap.seeking_restaurants_provider.entity.Calendar;
 import com.fiap.seeking_restaurants_provider.entity.Restaurant;
+import com.fiap.seeking_restaurants_provider.service.validation.Calendar.ValidCalendarCreation;
+import com.fiap.seeking_restaurants_provider.service.validation.Calendar.ValidOpenAndCloseHour;
 import jakarta.validation.constraints.NotBlank;
 
+@ValidCalendarCreation(message = "Preencha os dias com o formato 'hh:mm-hh:mm', como 'fechado' ou 'closed'")
+@ValidOpenAndCloseHour(message = "A hora de abertura deve ser menor que a hora de fechamento")
 public record CalendarRestaurantDTO(
 		Long id,
-		@NotBlank(message = "Preencha uma hora ou defina como 'fechado'") //The monday hour can't be blank
+		@NotBlank(message = "Preencha uma hora ou defina como 'fechado' ou 'closed' ") //The monday hour can't be blank
 		String monday_hours,
-		@NotBlank(message = "Preencha uma hora ou defina como 'fechado'") //The tuesday hour can't be blank
+		@NotBlank(message = "Preencha uma hora ou defina como 'fechado' ou 'closed' ") //The tuesday hour can't be blank
 		String tuesday_hours,
-		@NotBlank(message = "Preencha uma hora ou defina como 'fechado'") //The wednesday hour can't be blank
+		@NotBlank(message = "Preencha uma hora ou defina como 'fechado' ou 'closed' ") //The wednesday hour can't be blank
 		String wednesday_hours,
-		@NotBlank(message = "Preencha uma hora ou defina como 'fechado'") //The thursday hour can't be blank
+		@NotBlank(message = "Preencha uma hora ou defina como 'fechado' ou 'closed' ") //The thursday hour can't be blank
 		String thursday_hours,
-		@NotBlank(message = "Preencha uma hora ou defina como 'fechado'") //The friday hour can't be blank
+		@NotBlank(message = "Preencha uma hora ou defina como 'fechado' ou 'closed' ") //The friday hour can't be blank
 		String friday_hours,
-		@NotBlank(message = "Preencha uma hora ou defina como 'fechado'") //The saturday hour can't be blank
+		@NotBlank(message = "Preencha uma hora ou defina como 'fechado' ou 'closed' ") //The saturday hour can't be blank
 		String saturday_hours,
-		@NotBlank(message = "Preencha uma hora ou defina como 'fechado'") //The sunday hour can't be blank
+		@NotBlank(message = "Preencha uma hora ou defina como 'fechado' ou 'closed' ") //The sunday hour can't be blank
 		String sunday_hours,
 		Long restaurant_id
 ) {

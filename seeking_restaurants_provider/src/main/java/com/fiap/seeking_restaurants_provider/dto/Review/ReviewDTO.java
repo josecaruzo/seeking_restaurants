@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 public record ReviewDTO (
 		Long id,
 
-		@NotBlank
+		@NotBlank(message = "O nome do cliente não pode ser vazio") // THe guest name can't be blank
 		String guestName,
 
 		@Min(value = 1, message = "Não pode dar menos que 1 estrela") // Review can't have less than 1 star

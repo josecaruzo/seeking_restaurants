@@ -1,10 +1,9 @@
 package com.fiap.seeking_restaurants_provider.controller;
 
-import com.fiap.seeking_restaurants_provider.dto.Restaurant.RestaurantCalendarDTO;
-import com.fiap.seeking_restaurants_provider.dto.Restaurant.RestaurantDTO;
 import com.fiap.seeking_restaurants_provider.dto.Table.TableDTO;
 import com.fiap.seeking_restaurants_provider.dto.Table.TableRestaurantDTO;
 import com.fiap.seeking_restaurants_provider.service.TableService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,7 @@ public class TableController {
 		return ResponseEntity.ok(tables);
 	}
 	@PostMapping
-	public ResponseEntity<TableRestaurantDTO> add(@RequestBody TableRestaurantDTO tableDTO){
+	public ResponseEntity<TableRestaurantDTO> add( @Valid @RequestBody TableRestaurantDTO tableDTO){
 		var newTable = tableService.add(tableDTO);
 		return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(newTable);
 	}
@@ -37,7 +36,7 @@ public class TableController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<TableDTO> update(@PathVariable Long id, @RequestBody TableDTO tableDTO){
+	public ResponseEntity<TableDTO> update(@PathVariable Long id, @Valid @RequestBody TableDTO tableDTO){
 		TableDTO updateTable = tableService.update(id, tableDTO);
 		return ResponseEntity.ok(updateTable);
 	}

@@ -7,10 +7,10 @@ import jakarta.validation.constraints.Positive;
 public record TableRestaurantDTO(
 		Long id,
 
-		@Positive()
+		@Positive(message = "O número da mesa precisa ser positivo") // The table's number should be greater than 0
 		int number,
 
-		@Positive
+		@Positive(message = "A capacidade da mesa precisa ser positivo") // The table's capacity should be greater than 0
 		int capacity,
 
 		Long restaurant_id

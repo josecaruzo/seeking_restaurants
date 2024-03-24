@@ -1,12 +1,13 @@
 package com.fiap.seeking_restaurants_provider.service;
 
-import com.fiap.seeking_restaurants_provider.controller.exception.DatabaseException;
 import com.fiap.seeking_restaurants_provider.dto.Review.ReviewDTO;
 import com.fiap.seeking_restaurants_provider.dto.Review.ReviewRestaurantDTO;
 import com.fiap.seeking_restaurants_provider.entity.Restaurant;
 import com.fiap.seeking_restaurants_provider.entity.Review;
 import com.fiap.seeking_restaurants_provider.repository.RestaurantRepository;
 import com.fiap.seeking_restaurants_provider.repository.ReviewRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -35,8 +36,8 @@ public class ReviewService {
 			Restaurant restaurant = restaurantRepository.getReferenceById(restaurant_id);
 			var reviews = reviewRepository.findByRestaurant(restaurant);
 			return reviews.stream().map(ReviewRestaurantDTO::fromEntity).collect(Collectors.toList());
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Restaurante não encontrado"); // Restaurant not found
+		}catch (DataIntegrityViolationException | LazyInitializationException e) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
 		}
 	}
 	public ReviewRestaurantDTO add(ReviewRestaurantDTO dto) {
@@ -46,8 +47,8 @@ public class ReviewService {
 			var newReview = reviewRepository.save(review);
 
 			return ReviewRestaurantDTO.fromEntity(newReview);
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Restaurante não encontrado"); // Restaurant not found
+		}catch (DataIntegrityViolationException | LazyInitializationException e) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
 		}
 	}
 
@@ -62,12 +63,16 @@ public class ReviewService {
 			updateReview = reviewRepository.save(updateReview);
 
 			return ReviewDTO.fromEntity(updateReview);
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Mesa não encontrada"); // Table not found
+		}catch (DataIntegrityViolationException | LazyInitializationException e) {
+			throw new EntityNotFoundException("Avaliação não encontrada"); // review not found
 		}
 	}
 
 	public void delete(Long id){
-		reviewRepository.deleteById(id);
+		try{
+			reviewRepository.deleteById(id);
+		}catch (DataIntegrityViolationException | LazyInitializationException e) {
+			throw new EntityNotFoundException("Avaliação não encontrada"); // review not found
+		}
 	}
 }

@@ -7,6 +7,8 @@ import com.fiap.seeking_restaurants_provider.entity.Restaurant;
 import com.fiap.seeking_restaurants_provider.entity.Table;
 import com.fiap.seeking_restaurants_provider.repository.RestaurantRepository;
 import com.fiap.seeking_restaurants_provider.repository.TableRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -31,8 +33,8 @@ public class TableService {
 			Restaurant restaurant = restaurantRepository.getReferenceById(restaurant_id);
 			var tables = tableRepository.findByRestaurant(restaurant);
 			return tables.stream().map(TableRestaurantDTO::fromEntity).collect(Collectors.toList());
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Restaurante não encontrado"); // Restaurant not found
+		}catch (DataIntegrityViolationException | LazyInitializationException e) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
 		}
 	}
 	public TableRestaurantDTO add(TableRestaurantDTO tableDTO) {
@@ -50,8 +52,8 @@ public class TableService {
 			var newTable = tableRepository.save(table);
 
 			return TableRestaurantDTO.fromEntity(newTable);
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Restaurante não encontrado"); // Restaurant not found
+		}catch (DataIntegrityViolationException | LazyInitializationException e) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
 		}
 	}
 
@@ -77,8 +79,8 @@ public class TableService {
 			else{
 				throw new DatabaseException("Mesas já cadastradas"); // Tables added already
 			}
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Restaurante não encontrado"); // Restaurant not found
+		}catch (DataIntegrityViolationException | LazyInitializationException e) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
 		}
 	}
 
@@ -92,8 +94,8 @@ public class TableService {
 			updateTable = tableRepository.save(updateTable);
 
 			return TableDTO.fromEntity(updateTable);
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Mesa não encontrada"); // Table not found
+		}catch (DataIntegrityViolationException | LazyInitializationException e) {
+			throw new EntityNotFoundException("Mesa não encontrada"); // Table not found
 		}
 	}
 
@@ -112,8 +114,8 @@ public class TableService {
 			//Delete table
 			tableRepository.deleteById(id);
 
-		}catch ( DataIntegrityViolationException e) {
-			throw new DatabaseException("Mesa não encontrada"); // Table not found
+		}catch (DataIntegrityViolationException | LazyInitializationException e) {
+			throw new EntityNotFoundException("Mesa não encontrada"); // Table not found
 		}
 	}
 }

@@ -1,20 +1,25 @@
 package com.fiap.seeking_restaurants_provider.dto.Reservation;
 
-		import com.fiap.seeking_restaurants_provider.entity.Reservation;
-		import com.fiap.seeking_restaurants_provider.entity.Restaurant;
-		import jakarta.validation.constraints.Email;
-		import jakarta.validation.constraints.FutureOrPresent;
-		import jakarta.validation.constraints.Min;
-		import jakarta.validation.constraints.NotBlank;
+import com.fiap.seeking_restaurants_provider.entity.Reservation;
+import com.fiap.seeking_restaurants_provider.entity.Restaurant;
+import com.fiap.seeking_restaurants_provider.service.validation.Reservation.ValidReservationHour;
+import com.fiap.seeking_restaurants_provider.service.validation.Reservation.ValidReservationPhoneNumber;
+import com.fiap.seeking_restaurants_provider.service.validation.Reservation.ValidReservationCreation;
+import com.fiap.seeking_restaurants_provider.service.validation.Reservation.ValidReservationRestaurantCalendar;
+import jakarta.validation.constraints.*;
 
-		import java.time.LocalDate;
-		import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
+@ValidReservationPhoneNumber(message= "Telefone inválido, siga o formato de número (99)99999-9999 ou (99)9999-9999")
+@ValidReservationHour(message = "A hora da reserva precisa ser em hora 'fechada'. Ex.: 19:00, 17:00")
+@ValidReservationCreation(message = "A Data e o horário estão no passado, só é possível fazer reserva para uma data futura")
+@ValidReservationRestaurantCalendar(message = "O restaurante não está disponível para reservas nesta data e hora, consulte o horário de funcionamento de estabelcimento")
 public record ReservationRestaurantDTO(
 		Long id,
 		@FutureOrPresent(message = "A data da reserva não pode ser feita no passado") //Reservation date can't be done in the past
 		LocalDate reservationDate,
-		@FutureOrPresent(message = "A hora da reserva não pode ser em um horário no passado") //Reservation hour can't be done in the past
+		@NotNull(message = "A hora da reserva não pode ser vazia") //Reservation hour can't be empty
 		LocalTime reservationHour,
 
 		@NotBlank(message = "Nome do convidado não pode ser vazio") // Guest name can't be blank
@@ -26,7 +31,7 @@ public record ReservationRestaurantDTO(
 		@NotBlank(message = "Telefone não pode ser vazio") // phone can't be blank
 		String guestPhone,
 
-		@Min(value = 1, message = "Telefone não pode ser vazio") // phone can't be blan
+		@Positive(message = "O total de mesas para reserva deve ser maior que zero") // tables can't be negative or zero
 		int totalTables,
 
 		Long restaurant_id
