@@ -40,7 +40,8 @@ public class Calendar {
 
 	public Calendar(){}
 
-	public Calendar (String monday_hours, String tuesday_hours, String wednesday_hours, String thursday_hours, String friday_hours, String saturday_hours, String sunday_hours){
+	public Calendar (Long id, String monday_hours, String tuesday_hours, String wednesday_hours, String thursday_hours, String friday_hours, String saturday_hours, String sunday_hours){
+		this.id = id;
 		this.monday_hours = monday_hours;
 		this.tuesday_hours = tuesday_hours;
 		this.wednesday_hours = wednesday_hours;

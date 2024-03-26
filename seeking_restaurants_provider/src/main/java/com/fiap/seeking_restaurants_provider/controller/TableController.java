@@ -15,12 +15,16 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/tables")
 public class TableController {
-	@Autowired
-	private TableService tableService;
+	private final TableService tableService;
 
-	@GetMapping("/{restaurant_id}")
-	public ResponseEntity<Collection<TableRestaurantDTO>> findByRestaurant(@PathVariable Long restaurant_id){
-		var tables = tableService.findByRestaurant(restaurant_id);
+	@Autowired
+	public TableController(TableService tableService){
+		this.tableService = tableService;
+	}
+
+	@GetMapping("/{restaurantId}")
+	public ResponseEntity<Collection<TableRestaurantDTO>> findByRestaurant(@PathVariable Long restaurantId){
+		var tables = tableService.findByRestaurant(restaurantId);
 		return ResponseEntity.ok(tables);
 	}
 	@PostMapping
@@ -29,9 +33,9 @@ public class TableController {
 		return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(newTable);
 	}
 
-	@PostMapping("/all/{restaurant_id}")
-	public ResponseEntity<Collection<TableRestaurantDTO>> addAll(@PathVariable Long restaurant_id){
-		var newTables = tableService.addAll(restaurant_id);
+	@PostMapping("/all/{restaurantId}")
+	public ResponseEntity<Collection<TableRestaurantDTO>> addAll(@PathVariable Long restaurantId){
+		var newTables = tableService.addAll(restaurantId);
 		return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(newTables);
 	}
 
@@ -42,8 +46,8 @@ public class TableController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id){
+	public ResponseEntity<String> delete(@PathVariable Long id){
 		tableService.delete(id);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok("Table " + id + " deleted");
 	}
 }

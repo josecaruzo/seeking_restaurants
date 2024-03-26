@@ -14,16 +14,22 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/reviews")
 public class ReviewController {
+
+	private final ReviewService reviewService;
+
 	@Autowired
-	private ReviewService reviewService;
+	public ReviewController(ReviewService reviewService){
+		this.reviewService = reviewService;
+	}
+
 	@GetMapping
 	public ResponseEntity<Collection<ReviewRestaurantDTO>> findAll(){
 		var reviews = reviewService.findAll();
 		return ResponseEntity.ok(reviews);
 	}
-	@GetMapping("/{restaurant_id}")
-	public ResponseEntity<Collection<ReviewRestaurantDTO>> findByRestaurant(@PathVariable Long restaurant_id){
-		var reviews = reviewService.findByRestaurant(restaurant_id);
+	@GetMapping("/{restaurantId}")
+	public ResponseEntity<Collection<ReviewRestaurantDTO>> findByRestaurant(@PathVariable Long restaurantId){
+		var reviews = reviewService.findByRestaurant(restaurantId);
 		return ResponseEntity.ok(reviews);
 	}
 	@PostMapping
@@ -39,8 +45,8 @@ public class ReviewController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id){
+	public ResponseEntity<String> delete(@PathVariable Long id){
 		reviewService.delete(id);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok("Review " + id + " deleted");
 	}
 }

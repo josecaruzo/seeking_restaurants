@@ -5,7 +5,7 @@ import com.fiap.seeking_restaurants_provider.service.validation.Restaurant.Valid
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
-@ValidRestaurantCreation(message = "Já foi cadastrado um restaurante com esse nome")
+//@ValidRestaurantCreation(message = "Já foi cadastrado um restaurante com esse nome")
 public record RestaurantDTO(
 		Long id,
 		@NotBlank(message = "O nome não pode ser vazio") //The name can't be blank

@@ -1,6 +1,5 @@
 package com.fiap.seeking_restaurants_provider.controller;
 
-import com.fiap.seeking_restaurants_provider.controller.exception.ControllerExceptionHandler;
 import com.fiap.seeking_restaurants_provider.dto.Calendar.CalendarDTO;
 import com.fiap.seeking_restaurants_provider.dto.Calendar.CalendarRestaurantDTO;
 import com.fiap.seeking_restaurants_provider.dto.Restaurant.RestaurantCalendarDTO;
@@ -8,7 +7,6 @@ import com.fiap.seeking_restaurants_provider.dto.Restaurant.RestaurantDTO;
 import com.fiap.seeking_restaurants_provider.entity.Calendar;
 import com.fiap.seeking_restaurants_provider.service.CalendarService;
 import com.fiap.seeking_restaurants_provider.service.RestaurantService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -20,11 +18,15 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/restaurants")
 public class RestaurantController {
-	@Autowired
-	private RestaurantService restaurantService;
+	private final RestaurantService restaurantService;
+
+	private final CalendarService calendarService;
 
 	@Autowired
-	private CalendarService calendarService;
+	public RestaurantController(RestaurantService restaurantService, CalendarService calendarService){
+		this.restaurantService = restaurantService;
+		this.calendarService = calendarService;
+	}
 
 	@GetMapping
 	public ResponseEntity<Collection<RestaurantCalendarDTO>> findAll(){
@@ -44,9 +46,9 @@ public class RestaurantController {
 		return ResponseEntity.ok(restaurants);
 	}
 
-	@GetMapping("/type/{restaurant_type}")
-	public ResponseEntity<Collection<RestaurantCalendarDTO>> findByType(@PathVariable String restaurant_type){
-		var restaurants = restaurantService.findByType(restaurant_type);
+	@GetMapping("/type/{type}")
+	public ResponseEntity<Collection<RestaurantCalendarDTO>> findByType(@PathVariable String type){
+		var restaurants = restaurantService.findByType(type);
 		return ResponseEntity.ok(restaurants);
 	}
 
@@ -83,8 +85,8 @@ public class RestaurantController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id){
+	public ResponseEntity<String> delete(@PathVariable Long id){
 		restaurantService.delete(id);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok("Restaurant " + id + " deleted");
 	}
 }

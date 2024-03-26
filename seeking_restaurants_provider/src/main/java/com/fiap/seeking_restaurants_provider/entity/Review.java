@@ -28,7 +28,8 @@ public class Review {
 
 	public Review(){}
 
-	public Review(String guestName, int stars, String comment){
+	public Review(Long id, String guestName, int stars, String comment){
+		this.id = id;
 		this.guestName = guestName;
 		this.stars = stars;
 		this.comment = comment;

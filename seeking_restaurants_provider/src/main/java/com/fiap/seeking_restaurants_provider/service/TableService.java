@@ -63,18 +63,22 @@ public class TableService {
 			var tables = tableRepository.findByRestaurant(restaurant); //To confirm correct restaurant capacity
 
 			if(tables.isEmpty()) {
-				Collection<TableRestaurantDTO> newTables = new ArrayList<>();
+				Collection<Table> newTables = new ArrayList<>();
 
 				for (int i = 1; i <= restaurant.getCapacity(); i++) {
-					Table table = new Table(i, 4); // default capacity as 4
+					Table table = new Table();
+					table.setNumber(i);
+					table.setCapacity(4); // default capacity as 4
 					table.setRestaurant(restaurant);
-					var newTable = tableRepository.save(table);
 
-					if (newTable.getId() != null) {
-						newTables.add(TableRestaurantDTO.fromEntity(newTable));
-					}
+					newTables.add(table);
 				}
-				return newTables;
+
+				var savedTables = tableRepository.saveAll(newTables);
+
+				return savedTables.stream().map(TableRestaurantDTO::fromEntity).collect(Collectors.toList());
+
+
 			}
 			else{
 				throw new DatabaseException("Mesas já cadastradas"); // Tables added already

@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @ValidReservationPhoneNumber(message= "Telefone inválido, siga o formato de número (99)99999-9999 ou (99)9999-9999")
 @ValidReservationHour(message = "A hora da reserva precisa ser em hora 'fechada'. Ex.: 19:00, 17:00")
 @ValidReservationCreation(message = "A Data e o horário estão no passado, só é possível fazer reserva para uma data futura")
-@ValidReservationRestaurantCalendar(message = "O restaurante não está disponível para reservas nesta data e hora, consulte o horário de funcionamento de estabelcimento")
+//@ValidReservationRestaurantCalendar(message = "O restaurante não está disponível para reservas nesta data e hora, consulte o horário de funcionamento de estabelcimento")
 public record ReservationRestaurantDTO(
 		Long id,
 		@FutureOrPresent(message = "A data da reserva não pode ser feita no passado") //Reservation date can't be done in the past

@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 
-@ValidRestaurantCreation(message = "Já foi cadastrado um restaurante com esse nome")
+//@ValidRestaurantCreation(message = "Já foi cadastrado um restaurante com esse nome")
 public record RestaurantCalendarDTO(
 		Long id,
 		@NotBlank(message = "O nome não pode ser vazio") //The name can't be blank

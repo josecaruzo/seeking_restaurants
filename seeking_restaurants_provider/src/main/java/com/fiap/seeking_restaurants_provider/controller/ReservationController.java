@@ -16,25 +16,29 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/reservations")
 public class ReservationController {
+	private final ReservationService reservationService;
+
 	@Autowired
-	private ReservationService reservationService;
+	public ReservationController(ReservationService reservationService){
+		this.reservationService = reservationService;
+	}
 
-	@GetMapping("/restaurant/{restaurant_id}")
-	public ResponseEntity<Collection<ReservationRestaurantTableDTO>> findByRestaurant(@PathVariable Long restaurant_id){
-		var reservations = reservationService.findByRestaurant(restaurant_id);
+	@GetMapping("/restaurant/{restaurantId}")
+	public ResponseEntity<Collection<ReservationRestaurantTableDTO>> findByRestaurant(@PathVariable Long restaurantId){
+		var reservations = reservationService.findByRestaurant(restaurantId);
 		return ResponseEntity.ok(reservations);
 	}
 
-	@GetMapping("/restaurant/{restaurant_id}/date/{reservationDate}")
-	public ResponseEntity<Collection<ReservationRestaurantTableDTO>> findByRestaurantAndReservationDate(@PathVariable Long restaurant_id, @PathVariable LocalDate reservationDate){
-		var reservations = reservationService.findByRestaurantAndReservationDate(reservationDate, restaurant_id);
+	@GetMapping("/restaurant/{restaurantId}/date/{reservationDate}")
+	public ResponseEntity<Collection<ReservationRestaurantTableDTO>> findByRestaurantAndReservationDate(@PathVariable Long restaurantId, @PathVariable LocalDate reservationDate){
+		var reservations = reservationService.findByRestaurantAndReservationDate(restaurantId, reservationDate);
 		return ResponseEntity.ok(reservations);
 	}
 
-	@GetMapping("/restaurant/{restaurant_id}/date/{reservationDate}/hour/{reservationHour}")
+	@GetMapping("/restaurant/{restaurantId}/date/{reservationDate}/hour/{reservationHour}")
 	public ResponseEntity<Collection<ReservationRestaurantTableDTO>> findByRestaurantAndReservationDateAndReservationHour(
-			@PathVariable Long restaurant_id, @PathVariable LocalDate reservationDate, @PathVariable LocalTime reservationHour){
-		var reservations = reservationService.findByRestaurantAndReservationDateAndReservationHour(restaurant_id, reservationDate, reservationHour);
+			@PathVariable Long restaurantId, @PathVariable LocalDate reservationDate, @PathVariable LocalTime reservationHour){
+		var reservations = reservationService.findByRestaurantAndReservationDateAndReservationHour(restaurantId, reservationDate, reservationHour);
 		return ResponseEntity.ok(reservations);
 	}
 	@PostMapping
@@ -50,8 +54,8 @@ public class ReservationController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id){
+	public ResponseEntity<String> delete(@PathVariable Long id){
 		reservationService.delete(id);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok("Reservation " + id + " deleted");
 	}
 }

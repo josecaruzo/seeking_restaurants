@@ -3,14 +3,12 @@ package com.fiap.seeking_restaurants_provider.service;
 import com.fiap.seeking_restaurants_provider.controller.exception.DatabaseException;
 import com.fiap.seeking_restaurants_provider.dto.Reservation.ReservationRestaurantDTO;
 import com.fiap.seeking_restaurants_provider.dto.Reservation.ReservationRestaurantTableDTO;
-import com.fiap.seeking_restaurants_provider.dto.Restaurant.RestaurantCalendarDTO;
 import com.fiap.seeking_restaurants_provider.entity.Reservation;
 import com.fiap.seeking_restaurants_provider.entity.Restaurant;
 import com.fiap.seeking_restaurants_provider.entity.Table;
 import com.fiap.seeking_restaurants_provider.repository.ReservationRepository;
 import com.fiap.seeking_restaurants_provider.repository.RestaurantRepository;
 import com.fiap.seeking_restaurants_provider.repository.TableRepository;
-import com.sun.source.tree.WhileLoopTree;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.LazyInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +68,7 @@ public class ReservationService {
 		}
 	}
 
-	public List<ReservationRestaurantTableDTO> findByRestaurantAndReservationDate(LocalDate reservationDate, Long restaurant_id){
+	public List<ReservationRestaurantTableDTO> findByRestaurantAndReservationDate(Long restaurant_id, LocalDate reservationDate){
 		try{
 			Restaurant restaurant = restaurantRepository.getReferenceById(restaurant_id);
 			var reservations = reservationRepository.findByRestaurantAndReservationDate(restaurant, reservationDate);
@@ -148,7 +146,7 @@ public class ReservationService {
 				if(reservation.getTotalTables() < oldReservation.getTotalTables()){
 					List<Table> tempTables =  new LinkedList<Table> (oldReservation.getTables().stream().toList());
 					for(int i = 0; i < (oldReservation.getTotalTables() - reservation.getTotalTables()); i++){
-						tempTables.removeLast();
+						tempTables.remove(tempTables.size() - 1);
 					}
 					tables = Set.copyOf(tempTables);
 				}

@@ -1,5 +1,6 @@
 package com.fiap.seeking_restaurants_provider.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fiap.seeking_restaurants_provider.dto.Reservation.ReservationDTO;
 import com.fiap.seeking_restaurants_provider.dto.Reservation.ReservationRestaurantDTO;
 import jakarta.persistence.*;
@@ -20,10 +21,12 @@ public class Reservation {
 
 	@Column(nullable = false)
 	@DateTimeFormat(pattern="dd/MM/YYYY")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/YYYY")
 	private LocalDate reservationDate;
 
 	@Column(nullable = false)
 	@DateTimeFormat(pattern="HH:mm")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
 	private LocalTime reservationHour;
 
 	@Column(length = 40, nullable = false)
@@ -47,7 +50,8 @@ public class Reservation {
 
 	public Reservation(){}
 
-	public Reservation(LocalDate reservationDate, LocalTime reservationHour, String guestName, String guestEmail, String guestPhone, int totalTables){
+	public Reservation(Long id, LocalDate reservationDate, LocalTime reservationHour, String guestName, String guestEmail, String guestPhone, int totalTables){
+		this.id = id;
 		this.reservationDate = reservationDate;
 		this.reservationHour = reservationHour;
 		this.guestName = guestName;

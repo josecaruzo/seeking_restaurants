@@ -10,13 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 
 public class RestaurantCreationValidator implements ConstraintValidator<ValidRestaurantCreation, RestaurantDTO> {
-	@Autowired
-	private RestaurantRepository restaurantRepository;
+	private final RestaurantRepository restaurantRepository;
+
+	public RestaurantCreationValidator(RestaurantRepository restaurantRepository){
+		this.restaurantRepository = restaurantRepository;
+	}
 
 	@Override
 	public boolean isValid(RestaurantDTO restaurantDTO, ConstraintValidatorContext context) {
 		Optional<Restaurant> restaurant = restaurantRepository.findByName(restaurantDTO.name());
-
 		return restaurant.isEmpty();
 	}
 }

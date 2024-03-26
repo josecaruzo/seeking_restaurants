@@ -30,6 +30,15 @@ public class RestaurantService {
 		return restaurants.stream().map(RestaurantCalendarDTO::fromEntity).collect(Collectors.toList());
 	}
 
+	public RestaurantCalendarDTO findById(Long id){
+		try {
+			var restaurant = restaurantRepository.getReferenceById(id);
+			return RestaurantCalendarDTO.fromEntity(restaurant);
+		}catch ( DataIntegrityViolationException | LazyInitializationException e ) {
+			throw new EntityNotFoundException("Restaurante não encontrado"); // Restaurant not found
+		}
+	}
+
 	public Collection<RestaurantCalendarDTO> findByName(String name){
 		var restaurants = restaurantRepository.findByNameContainingIgnoreCase(name);
 		return restaurants.stream().map(RestaurantCalendarDTO::fromEntity).collect(Collectors.toList());

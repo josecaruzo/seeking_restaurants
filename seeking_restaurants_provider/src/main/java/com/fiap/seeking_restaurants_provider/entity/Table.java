@@ -33,7 +33,8 @@ public class Table { //Restable = Restaurant table
 
 	public Table(){}
 
-	public Table(int number, int capacity){
+	public Table(Long id, int number, int capacity){
+		this.id = id;
 		this.number = number;
 		this.capacity = capacity;
 	}
