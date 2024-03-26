@@ -12,14 +12,6 @@ java {
 	sourceCompatibility = '20'
 }
 
-tasks.withType(Jar) {
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-	manifest {
-		attributes["Main-Class"] = "com.fiap.seeking_restaurants_provider.SeekingRestaurantsProviderApplication"
-	}
-}
-
 test{
 	//JVM options
 	jvmArgs("-XX:+EnableDynamicAgentLoading", "-Djdk.instrument.traceUsage", "-Xshare:off")
@@ -34,12 +26,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.webjars:swagger-ui:4.18.1'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
+
 	implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	runtimeOnly 'com.h2database:h2:2.2.224'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.assertj:assertj-core:3.24.2'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
