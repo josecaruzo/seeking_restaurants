@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.fiap.seeking_restaurants_provider.SeekingRestaurantsProv
+ iderApplication
+

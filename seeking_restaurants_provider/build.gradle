@@ -2,13 +2,22 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.3'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id 'com.bmuschko.docker-spring-boot-application' version '6.1.4'
 }
 
 group = 'com.fiap.seeking_restaurants_provider'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '21'
+	sourceCompatibility = '20'
+}
+
+tasks.withType(Jar) {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+	manifest {
+		attributes["Main-Class"] = "com.fiap.seeking_restaurants_provider.SeekingRestaurantsProviderApplication"
+	}
 }
 
 test{
@@ -30,11 +39,16 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'com.h2database:h2:2.2.224'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.assertj:assertj-core:3.24.2'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
 	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 	testImplementation 'com.callibrity.logging:log-tracker:1.0.1'
+	testImplementation 'io.cucumber:cucumber-java:7.13.0'
+	testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.13.0'
+	testImplementation 'org.junit.platform:junit-platform-suite:1.9.3'
+
 }
 
 tasks.named('test') {
