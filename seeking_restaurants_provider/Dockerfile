@@ -1,4 +1,4 @@
 FROM openjdk:20
 WORKDIR application
-COPY seeking_restaurants_provider.main.jar ./
-ENTRYPOINT ["java","-jar","seeking_restaurants_provider.main.jar"]
+COPY temp/seeking_restaurants_provider.main.jar ./app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
