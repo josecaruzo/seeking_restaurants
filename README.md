@@ -1,5 +1,5 @@
 # seeking_restaurants
-App Seeking for restaurants - FIAP Tech Challenge III
+3º FIAP Tech Challenge
 
 Passos para poder testar a aplicação:
 
