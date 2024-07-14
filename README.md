@@ -1,5 +1,5 @@
 # seeking_restaurants
-3º FIAP Tech Challenge
+3º Tech Challenge - POS TECH FIAP
 
 Passos para poder testar a aplicação:
 
